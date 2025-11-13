@@ -90,7 +90,10 @@ export default function RegisterScreen() {
               />
             </View>
 
-            <TouchableOpacity activeOpacity={0.85} style={styles.ctaButton}>
+            <TouchableOpacity
+              activeOpacity={0.85}
+              style={styles.ctaButton}
+              onPress={() => router.replace('/dashboard')}>
               <Text style={styles.ctaText}>Register</Text>
             </TouchableOpacity>
           </View>
@@ -165,4 +168,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_500Medium',
   },
 });
-
