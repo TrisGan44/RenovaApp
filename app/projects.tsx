@@ -1,3 +1,4 @@
+import { type Href, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -5,7 +6,18 @@ import { AuthHeader } from '@/components/auth/AuthHeader';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { SearchField } from '@/components/ui/SearchField';
 
-const PROJECTS = [
+type ProjectListItem = {
+  id: string;
+  title: string;
+  details: {
+    label: string;
+    value: string;
+  }[];
+  actionLabel: string;
+  actionRoute?: Href;
+};
+
+const PROJECTS: ProjectListItem[] = [
   {
     id: '1',
     title: 'Renovasi Ruko',
@@ -14,6 +26,7 @@ const PROJECTS = [
       { label: 'Lokasi', value: 'Jakarta' },
     ],
     actionLabel: 'Detail',
+    actionRoute: '/project-detail',
   },
   {
     id: '2',
@@ -28,6 +41,7 @@ const PROJECTS = [
 
 export default function ProjectsScreen() {
   const [query, setQuery] = useState('');
+  const router = useRouter();
 
   const filteredProjects = PROJECTS.filter((project) => {
     const haystack = [project.title, ...project.details.map((detail) => detail.value)]
@@ -57,8 +71,12 @@ export default function ProjectsScreen() {
           />
 
           <View style={styles.list}>
-            {filteredProjects.map((project) => (
-              <ProjectCard key={project.id} {...project} />
+            {filteredProjects.map(({ id, actionRoute, ...projectData }) => (
+              <ProjectCard
+                key={id}
+                {...projectData}
+                onPressAction={actionRoute ? () => router.push(actionRoute) : undefined}
+              />
             ))}
             {filteredProjects.length === 0 ? (
               <Text style={styles.emptyState}>Proyek tidak ditemukan.</Text>

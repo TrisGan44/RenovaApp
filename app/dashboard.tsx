@@ -39,6 +39,13 @@ export default function DashboardScreen() {
             onPress={() => router.push('/projects')}>
             <Text style={styles.primaryButtonText}>Lihat Semua Proyek</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.85}
+            style={styles.secondaryButton}
+            onPress={() => router.push('/profile')}>
+            <Text style={styles.secondaryButtonText}>Profile Saya</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -97,6 +104,19 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     color: '#FFFFFF',
     fontSize: 17,
+    fontFamily: 'Poppins_500Medium',
+  },
+  secondaryButton: {
+    backgroundColor: '#EEF0FF',
+    paddingVertical: 14,
+    borderRadius: 28,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#B8C1FF',
+  },
+  secondaryButtonText: {
+    color: '#0C21C1',
+    fontSize: 16,
     fontFamily: 'Poppins_500Medium',
   },
 });
