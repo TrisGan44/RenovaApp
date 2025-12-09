@@ -11,6 +11,10 @@ import {
 } from 'react-native';
 
 import { colors, gradients, shadows } from '@/constants/theme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { StatusPill } from '@/components/ui/StatusPill';
 
 type PaymentStatus = 'Lunas' | 'Pending';
 
@@ -44,11 +48,6 @@ const PAYMENT_ITEMS: {
   },
 ];
 
-const statusPill: Record<PaymentStatus, { bg: string; text: string }> = {
-  Lunas: { bg: '#E8F9F1', text: colors.success },
-  Pending: { bg: '#FFF4E6', text: colors.warning },
-};
-
 export default function BayarScreen() {
   const router = useRouter();
 
@@ -58,7 +57,7 @@ export default function BayarScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Text style={styles.title}>Pembayaran</Text>
+        <SectionHeader title="Pembayaran" />
 
         <LinearGradient colors={gradients.primary} style={styles.summaryCard}>
           <View style={styles.summaryTop}>
@@ -90,47 +89,31 @@ export default function BayarScreen() {
             <TouchableOpacity
               key={item.id}
               activeOpacity={0.9}
-              style={styles.paymentCard}
+              style={styles.paymentTouchable}
               onPress={() => router.push({ pathname: '/payment', params: { id: item.id } })}>
-              <View style={styles.paymentHeader}>
-                <View>
-                  <Text style={styles.paymentTitle}>{item.title}</Text>
-                  <Text style={styles.paymentAmount}>{item.amount}</Text>
-                </View>
-                <View
-                  style={[
-                    styles.paymentPill,
-                    { backgroundColor: statusPill[item.status].bg },
-                  ]}>
-                  <Ionicons
-                    name={item.status === 'Lunas' ? 'checkmark-circle' : 'alert-circle'}
-                    size={16}
-                    color={statusPill[item.status].text}
+              <Card style={styles.paymentCard}>
+                <View style={styles.paymentHeader}>
+                  <View>
+                    <Text style={styles.paymentTitle}>{item.title}</Text>
+                    <Text style={styles.paymentAmount}>{item.amount}</Text>
+                  </View>
+                  <StatusPill
+                    label={item.status}
+                    tone={item.status === 'Lunas' ? 'success' : 'warning'}
+                    style={styles.paymentPill}
                   />
-                  <Text
-                    style={[
-                      styles.paymentPillText,
-                      { color: statusPill[item.status].text },
-                    ]}>
-                    {item.status}
-                  </Text>
                 </View>
-              </View>
 
-              <View style={styles.dueRow}>
-                <Ionicons name="calendar-outline" size={16} color={colors.muted} />
-                <Text style={styles.dueText}>Jatuh tempo: {item.due}</Text>
-              </View>
+                <View style={styles.dueRow}>
+                  <Ionicons name="calendar-outline" size={16} color={colors.muted} />
+                  <Text style={styles.dueText}>Jatuh tempo: {item.due}</Text>
+                </View>
+              </Card>
             </TouchableOpacity>
           ))}
         </View>
 
-        <TouchableOpacity
-          activeOpacity={0.9}
-          style={styles.payButton}
-          onPress={() => router.push('/payment')}>
-          <Text style={styles.payText}>Bayar Sekarang</Text>
-        </TouchableOpacity>
+        <Button label="Bayar Sekarang" onPress={() => router.push('/payment')} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -145,12 +128,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 60,
     gap: 14,
-  },
-  title: {
-    marginTop: 6,
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: colors.text,
   },
   summaryCard: {
     borderRadius: 20,
@@ -205,12 +182,11 @@ const styles = StyleSheet.create({
   list: {
     gap: 12,
   },
-  paymentCard: {
-    backgroundColor: colors.card,
+  paymentTouchable: {
     borderRadius: 16,
-    padding: 14,
+  },
+  paymentCard: {
     gap: 8,
-    ...shadows.card,
   },
   paymentHeader: {
     flexDirection: 'row',

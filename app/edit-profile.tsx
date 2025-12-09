@@ -7,11 +7,13 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
-import { colors, shadows } from '@/constants/theme';
+import { colors } from '@/constants/theme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 export default function EditProfileScreen() {
   const [name, setName] = useState('Budi Santoso');
@@ -31,10 +33,9 @@ export default function EditProfileScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Text style={styles.title}>Edit Profil</Text>
-        <Text style={styles.subtitle}>Perbarui data pribadi Anda.</Text>
+        <SectionHeader title="Edit Profil" subtitle="Perbarui data pribadi Anda." />
 
-        <View style={styles.card}>
+        <Card style={styles.card}>
           <View style={styles.field}>
             <Text style={styles.label}>Nama Lengkap</Text>
             <TextInput
@@ -78,14 +79,10 @@ export default function EditProfileScreen() {
               placeholderTextColor={colors.muted}
             />
           </View>
-        </View>
+        </Card>
 
-        <TouchableOpacity activeOpacity={0.9} style={styles.primaryButton} onPress={handleSave}>
-          <Text style={styles.primaryText}>Simpan</Text>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} style={styles.secondaryButton} onPress={router.back}>
-          <Text style={styles.secondaryText}>Batal</Text>
-        </TouchableOpacity>
+        <Button label="Simpan" onPress={handleSave} />
+        <Button variant="secondary" label="Batal" onPress={router.back} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -101,24 +98,10 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     gap: 12,
   },
-  title: {
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: colors.text,
-    marginTop: 8,
-  },
-  subtitle: {
-    fontSize: 13,
-    fontFamily: 'Poppins_400Regular',
-    color: colors.muted,
-  },
   card: {
     marginTop: 10,
-    backgroundColor: colors.card,
-    borderRadius: 16,
     padding: 14,
     gap: 14,
-    ...shadows.card,
   },
   field: {
     gap: 6,
@@ -136,30 +119,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text,
     fontFamily: 'Poppins_500Medium',
-  },
-  primaryButton: {
-    marginTop: 6,
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 14,
-    alignItems: 'center',
-    ...shadows.card,
-  },
-  primaryText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontFamily: 'Poppins_700Bold',
-  },
-  secondaryButton: {
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  secondaryText: {
-    color: colors.text,
-    fontSize: 14,
-    fontFamily: 'Poppins_600SemiBold',
   },
 });

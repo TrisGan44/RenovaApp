@@ -1,9 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { colors, gradients, shadows } from '@/constants/theme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 export default function PaymentScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -20,8 +23,7 @@ export default function PaymentScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Text style={styles.title}>Bayar Tagihan</Text>
-        <Text style={styles.subtitle}>ID tagihan: {id ?? 'pelunasan'}</Text>
+        <SectionHeader title="Bayar Tagihan" subtitle={`ID tagihan: ${id ?? 'pelunasan'}`} />
 
         <LinearGradient colors={gradients.primary} style={styles.summaryCard}>
           <Text style={styles.summaryTitle}>Renovasi Dapur</Text>
@@ -29,7 +31,7 @@ export default function PaymentScreen() {
           <Text style={styles.summarySub}>Pembayaran tahap berikutnya</Text>
         </LinearGradient>
 
-        <View style={styles.detailCard}>
+        <Card style={styles.detailCard}>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Metode</Text>
             <Text style={styles.detailValue}>Transfer Bank</Text>
@@ -45,14 +47,10 @@ export default function PaymentScreen() {
               <Ionicons name="copy-outline" size={18} color={colors.primary} />
             </View>
           </View>
-        </View>
+        </Card>
 
-        <TouchableOpacity activeOpacity={0.9} style={styles.payButton} onPress={handlePay}>
-          <Text style={styles.payText}>Bayar Sekarang</Text>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} style={styles.secondaryButton} onPress={router.back}>
-          <Text style={styles.secondaryText}>Kembali</Text>
-        </TouchableOpacity>
+        <Button label="Bayar Sekarang" onPress={handlePay} />
+        <Button variant="secondary" label="Kembali" onPress={router.back} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -67,17 +65,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 40,
     gap: 12,
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: colors.text,
-    marginTop: 8,
-  },
-  subtitle: {
-    fontSize: 13,
-    fontFamily: 'Poppins_400Regular',
-    color: colors.muted,
   },
   summaryCard: {
     marginTop: 10,
@@ -102,11 +89,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_400Regular',
   },
   detailCard: {
-    backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 14,
     gap: 10,
-    ...shadows.card,
   },
   detailRow: {
     flexDirection: 'row',
@@ -132,30 +115,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text,
     fontFamily: 'Poppins_700Bold',
-  },
-  payButton: {
-    marginTop: 6,
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 14,
-    alignItems: 'center',
-    ...shadows.card,
-  },
-  payText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontFamily: 'Poppins_700Bold',
-  },
-  secondaryButton: {
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  secondaryText: {
-    color: colors.text,
-    fontSize: 14,
-    fontFamily: 'Poppins_600SemiBold',
   },
 });

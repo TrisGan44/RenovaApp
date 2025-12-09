@@ -5,11 +5,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
-import { colors, shadows } from '@/constants/theme';
+import { colors } from '@/constants/theme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 export default function DesignDetailScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -21,10 +23,9 @@ export default function DesignDetailScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Text style={styles.title}>Detail Desain</Text>
-        <Text style={styles.subtitle}>ID desain: {id ?? 'N/A'}</Text>
+        <SectionHeader title="Detail Desain" subtitle={`ID desain: ${id ?? 'N/A'}`} />
 
-        <View style={styles.card}>
+        <Card style={styles.card}>
           <Text style={styles.cardTitle}>Desain Final</Text>
           <View style={styles.metaRow}>
             <Ionicons name="calendar-outline" size={16} color={colors.muted} />
@@ -43,17 +44,10 @@ export default function DesignDetailScreen() {
             <Ionicons name="checkmark-circle-outline" size={18} color={colors.success} />
             <Text style={styles.infoText}>Status: Disetujui klien</Text>
           </View>
-        </View>
+        </Card>
 
-        <TouchableOpacity
-          activeOpacity={0.9}
-          style={styles.primaryButton}
-          onPress={() => router.push('/revision-request')}>
-          <Text style={styles.primaryText}>Ajukan Revisi</Text>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.8} style={styles.secondaryButton} onPress={router.back}>
-          <Text style={styles.secondaryText}>Kembali</Text>
-        </TouchableOpacity>
+        <Button label="Ajukan Revisi" onPress={() => router.push('/revision-request')} />
+        <Button variant="secondary" label="Kembali" onPress={router.back} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -69,24 +63,9 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     gap: 12,
   },
-  title: {
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: colors.text,
-    marginTop: 8,
-  },
-  subtitle: {
-    fontSize: 13,
-    fontFamily: 'Poppins_400Regular',
-    color: colors.muted,
-  },
   card: {
     marginTop: 10,
-    backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 16,
     gap: 12,
-    ...shadows.card,
   },
   cardTitle: {
     fontSize: 17,
@@ -118,30 +97,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text,
     fontFamily: 'Poppins_500Medium',
-  },
-  primaryButton: {
-    marginTop: 6,
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 14,
-    alignItems: 'center',
-    ...shadows.card,
-  },
-  primaryText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontFamily: 'Poppins_700Bold',
-  },
-  secondaryButton: {
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  secondaryText: {
-    color: colors.text,
-    fontSize: 14,
-    fontFamily: 'Poppins_600SemiBold',
   },
 });

@@ -7,11 +7,13 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
-import { colors, shadows } from '@/constants/theme';
+import { colors } from '@/constants/theme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 export default function ConsultationScreen() {
   const [type, setType] = useState('');
@@ -35,10 +37,12 @@ export default function ConsultationScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Text style={styles.title}>Buat Janji Konsultasi</Text>
-        <Text style={styles.subtitle}>Isi form untuk memulai renovasi impian Anda</Text>
+        <SectionHeader
+          title="Buat Janji Konsultasi"
+          subtitle="Isi form untuk memulai renovasi impian Anda"
+        />
 
-        <View style={styles.card}>
+        <Card style={styles.card}>
           <View style={styles.field}>
             <Text style={styles.label}>Jenis Renovasi</Text>
             <TextInput
@@ -83,11 +87,9 @@ export default function ConsultationScreen() {
             />
           </View>
           <Text style={styles.helper}>Semakin detail deskripsi, semakin baik hasil konsultasi</Text>
-        </View>
+        </Card>
 
-        <TouchableOpacity activeOpacity={0.9} style={styles.primaryButton} onPress={handleSubmit}>
-          <Text style={styles.primaryText}>Kirim Permohonan</Text>
-        </TouchableOpacity>
+        <Button label="Kirim Permohonan" onPress={handleSubmit} />
         <Text style={styles.footerText}>Tim kami akan menghubungi Anda dalam 1x24 jam</Text>
       </ScrollView>
     </SafeAreaView>
@@ -104,24 +106,10 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     gap: 12,
   },
-  title: {
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: colors.text,
-    marginTop: 8,
-  },
-  subtitle: {
-    fontSize: 13,
-    fontFamily: 'Poppins_400Regular',
-    color: colors.muted,
-  },
   card: {
     marginTop: 10,
-    backgroundColor: colors.card,
-    borderRadius: 16,
     padding: 14,
     gap: 14,
-    ...shadows.card,
   },
   field: {
     gap: 6,
@@ -147,19 +135,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.muted,
     fontFamily: 'Poppins_400Regular',
-  },
-  primaryButton: {
-    marginTop: 4,
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 14,
-    alignItems: 'center',
-    ...shadows.card,
-  },
-  primaryText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontFamily: 'Poppins_700Bold',
   },
   footerText: {
     textAlign: 'center',

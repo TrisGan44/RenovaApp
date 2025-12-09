@@ -5,11 +5,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
-import { colors, shadows } from '@/constants/theme';
+import { colors } from '@/constants/theme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 const REPORTS = [
   {
@@ -39,12 +41,11 @@ export default function LaporanScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Text style={styles.title}>Laporan Harian</Text>
-        <Text style={styles.subtitle}>Update perkembangan dari mandor</Text>
+        <SectionHeader title="Laporan Harian" subtitle="Update perkembangan dari mandor" />
 
         <View style={styles.list}>
           {REPORTS.map((report) => (
-            <View key={report.id} style={styles.card}>
+            <Card key={report.id} style={styles.card}>
               <View style={styles.cardHeader}>
                 <View>
                   <Text style={styles.cardTitle}>{report.title}</Text>
@@ -69,13 +70,12 @@ export default function LaporanScreen() {
                 ))}
               </View>
 
-              <TouchableOpacity
-                activeOpacity={0.85}
-                style={styles.detailButton}
-                onPress={() => router.push({ pathname: '/report-detail', params: { id: report.id } })}>
-                <Text style={styles.detailText}>Lihat Detail</Text>
-              </TouchableOpacity>
-            </View>
+              <Button
+                variant="secondary"
+                label="Lihat Detail"
+                onPress={() => router.push({ pathname: '/report-detail', params: { id: report.id } })}
+              />
+            </Card>
           ))}
         </View>
       </ScrollView>
@@ -93,27 +93,12 @@ const styles = StyleSheet.create({
     paddingBottom: 60,
     gap: 10,
   },
-  title: {
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: colors.text,
-    marginTop: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontFamily: 'Poppins_400Regular',
-    color: colors.muted,
-  },
   list: {
     marginTop: 12,
     gap: 16,
   },
   card: {
-    backgroundColor: colors.card,
-    borderRadius: 18,
-    padding: 16,
     gap: 12,
-    ...shadows.card,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -169,17 +154,5 @@ const styles = StyleSheet.create({
     borderColor: '#E6E8F0',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  detailButton: {
-    marginTop: 4,
-    paddingVertical: 12,
-    borderRadius: 12,
-    backgroundColor: '#F7F8FF',
-    alignItems: 'center',
-  },
-  detailText: {
-    fontSize: 14,
-    color: colors.text,
-    fontFamily: 'Poppins_600SemiBold',
   },
 });

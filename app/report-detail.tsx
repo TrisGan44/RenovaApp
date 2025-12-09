@@ -5,11 +5,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
-import { colors, shadows } from '@/constants/theme';
+import { colors } from '@/constants/theme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/ui/SectionHeader';
 
 export default function ReportDetailScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -21,10 +23,9 @@ export default function ReportDetailScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Text style={styles.title}>Detail Laporan</Text>
-        <Text style={styles.subtitle}>ID laporan: {id ?? 'N/A'}</Text>
+        <SectionHeader title="Detail Laporan" subtitle={`ID laporan: ${id ?? 'N/A'}`} />
 
-        <View style={styles.card}>
+        <Card style={styles.card}>
           <View style={styles.row}>
             <Ionicons name="construct-outline" size={18} color={colors.primary} />
             <Text style={styles.cardTitle}>Pemasangan Kabinet</Text>
@@ -46,11 +47,9 @@ export default function ReportDetailScreen() {
               </View>
             ))}
           </View>
-        </View>
+        </Card>
 
-        <TouchableOpacity activeOpacity={0.8} style={styles.secondaryButton} onPress={router.back}>
-          <Text style={styles.secondaryText}>Kembali</Text>
-        </TouchableOpacity>
+        <Button variant="secondary" label="Kembali" onPress={router.back} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -66,24 +65,9 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     gap: 12,
   },
-  title: {
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: colors.text,
-    marginTop: 8,
-  },
-  subtitle: {
-    fontSize: 13,
-    fontFamily: 'Poppins_400Regular',
-    color: colors.muted,
-  },
   card: {
     marginTop: 10,
-    backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 16,
     gap: 12,
-    ...shadows.card,
   },
   row: {
     flexDirection: 'row',
@@ -128,18 +112,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.muted,
     fontFamily: 'Poppins_500Medium',
-  },
-  secondaryButton: {
-    marginTop: 6,
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  secondaryText: {
-    color: colors.text,
-    fontSize: 14,
-    fontFamily: 'Poppins_600SemiBold',
   },
 });

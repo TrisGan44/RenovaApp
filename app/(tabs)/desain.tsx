@@ -6,11 +6,14 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
-import { colors, gradients, shadows } from '@/constants/theme';
+import { colors, gradients } from '@/constants/theme';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SectionHeader } from '@/components/ui/SectionHeader';
+import { StatusPill } from '@/components/ui/StatusPill';
 
 type Status = 'Disetujui' | 'Direvisi';
 
@@ -37,11 +40,6 @@ const DESIGNS: {
   },
 ];
 
-const statusColor: Record<Status, { text: string; bg: string }> = {
-  Disetujui: { text: colors.success, bg: '#E8F9F1' },
-  Direvisi: { text: colors.warning, bg: '#FFF4E6' },
-};
-
 export default function DesainScreen() {
   const router = useRouter();
 
@@ -51,20 +49,18 @@ export default function DesainScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         bounces={false}>
-        <Text style={styles.title}>Desain & Revisi</Text>
-        <Text style={styles.subtitle}>Riwayat desain dari arsitek</Text>
+        <SectionHeader title="Desain & Revisi" subtitle="Riwayat desain dari arsitek" />
 
-        <TouchableOpacity
-          activeOpacity={0.9}
+        <Button
+          label="Ajukan Revisi Baru"
+          leftIcon="chatbox-ellipses-outline"
+          onPress={() => router.push('/revision-request')}
           style={styles.primaryButton}
-          onPress={() => router.push('/revision-request')}>
-          <Ionicons name="chatbox-ellipses-outline" size={18} color="#FFFFFF" />
-          <Text style={styles.primaryButtonText}>Ajukan Revisi Baru</Text>
-        </TouchableOpacity>
+        />
 
         <View style={styles.list}>
           {DESIGNS.map((design) => (
-            <View key={design.id} style={styles.card}>
+            <Card key={design.id} style={styles.card}>
               <View style={styles.cardHeader}>
                 <View>
                   <Text style={styles.cardTitle}>{design.title}</Text>
@@ -73,20 +69,11 @@ export default function DesainScreen() {
                     <Text style={styles.dateText}>{design.date}</Text>
                   </View>
                 </View>
-                <View
-                  style={[
-                    styles.statusPill,
-                    { backgroundColor: statusColor[design.status].bg },
-                  ]}>
-                  <Ionicons name="checkmark-circle" size={16} color={statusColor[design.status].text} />
-                  <Text
-                    style={[
-                      styles.statusText,
-                      { color: statusColor[design.status].text },
-                    ]}>
-                    {design.status}
-                  </Text>
-                </View>
+                <StatusPill
+                  label={design.status}
+                  tone={design.status === 'Disetujui' ? 'success' : 'warning'}
+                  style={styles.statusPill}
+                />
               </View>
 
               <Text style={styles.description}>{design.description}</Text>
@@ -95,15 +82,14 @@ export default function DesainScreen() {
                 <Ionicons name="document-outline" size={28} color={colors.primary} />
               </LinearGradient>
 
-              <TouchableOpacity
-                activeOpacity={0.85}
-                style={styles.detailButton}
+              <Button
+                variant="secondary"
+                label="Lihat Detail"
                 onPress={() =>
                   router.push({ pathname: '/design-detail', params: { id: design.id } })
-                }>
-                <Text style={styles.detailText}>Lihat Detail</Text>
-              </TouchableOpacity>
-            </View>
+                }
+              />
+            </Card>
           ))}
         </View>
       </ScrollView>
@@ -121,43 +107,15 @@ const styles = StyleSheet.create({
     paddingBottom: 60,
     gap: 10,
   },
-  title: {
-    fontSize: 20,
-    fontFamily: 'Poppins_700Bold',
-    color: colors.text,
-    marginTop: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    fontFamily: 'Poppins_400Regular',
-    color: colors.muted,
-  },
   primaryButton: {
     marginTop: 12,
-    backgroundColor: colors.primary,
-    paddingVertical: 14,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 10,
-    ...shadows.card,
-  },
-  primaryButtonText: {
-    color: '#FFFFFF',
-    fontFamily: 'Poppins_700Bold',
-    fontSize: 15,
   },
   list: {
     marginTop: 10,
     gap: 16,
   },
   card: {
-    backgroundColor: colors.card,
-    borderRadius: 18,
-    padding: 16,
     gap: 12,
-    ...shadows.card,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -203,17 +161,5 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  detailButton: {
-    marginTop: 4,
-    paddingVertical: 12,
-    borderRadius: 12,
-    backgroundColor: '#F7F8FF',
-    alignItems: 'center',
-  },
-  detailText: {
-    fontSize: 14,
-    color: colors.text,
-    fontFamily: 'Poppins_600SemiBold',
   },
 });
