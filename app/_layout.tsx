@@ -53,10 +53,13 @@ export default function RootLayout() {
         }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="register" />
-        <Stack.Screen name="dashboard" />
-        <Stack.Screen name="projects" />
-        <Stack.Screen name="project-detail" />
-        <Stack.Screen name="profile" />
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="consultation" />
+        <Stack.Screen name="design-detail" />
+        <Stack.Screen name="revision-request" />
+        <Stack.Screen name="report-detail" />
+        <Stack.Screen name="payment" />
+        <Stack.Screen name="edit-profile" />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

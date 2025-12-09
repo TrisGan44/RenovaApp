@@ -1,13 +1,14 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-    Pressable,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { AuthField } from '@/components/auth/AuthField';
@@ -21,6 +22,14 @@ export default function HomeScreen() {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const router = useRouter();
+  const handleLogin = () => {
+    if (!email.trim() || !password.trim()) {
+      Alert.alert('Login', 'Email dan password wajib diisi.');
+      return;
+    }
+
+    router.replace('/(tabs)/home');
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -35,15 +44,17 @@ export default function HomeScreen() {
           </View>
 
           <View style={styles.body}>
-            <Text style={styles.title}>Sign in</Text>
-            <Text style={styles.subtitle}>If you don't have an account register</Text>
+            <Text style={styles.title}>Masuk</Text>
+            <Text style={styles.subtitle}>
+              Gunakan email dan kata sandi untuk melanjutkan ke Renova.
+            </Text>
             <View style={styles.loginRow}>
-              <Text style={styles.subtitle}>You can</Text>
+              <Text style={styles.subtitle}>Belum punya akun?</Text>
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.loginButton}
                 onPress={() => router.push('/register')}>
-                <Text style={styles.loginLink}>Register here !</Text>
+                <Text style={styles.loginLink}>Daftar di sini</Text>
               </TouchableOpacity>
             </View>
 
@@ -81,15 +92,15 @@ export default function HomeScreen() {
                 <Text style={styles.rememberLabel}>Remember me</Text>
               </Pressable>
               <TouchableOpacity activeOpacity={0.7}>
-                <Text style={styles.forgotText}>Forgot Password ?</Text>
+                <Text style={styles.forgotText}>Lupa kata sandi?</Text>
               </TouchableOpacity>
             </View>
 
             <TouchableOpacity
               activeOpacity={0.85}
               style={styles.ctaButton}
-              onPress={() => router.replace('/dashboard')}>
-              <Text style={styles.ctaText}>Login</Text>
+              onPress={handleLogin}>
+              <Text style={styles.ctaText}>Masuk</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -128,6 +139,10 @@ const styles = StyleSheet.create({
     color: '#0E0E2C',
     fontFamily: 'Poppins_400Regular',
   },
+  form: {
+    marginTop: 24,
+    gap: 28,
+  },
   loginRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -141,12 +156,8 @@ const styles = StyleSheet.create({
     color: '#0C21C1',
     fontFamily: 'Poppins_600SemiBold',
   },
-  form: {
-    marginTop: 20,
-    gap: 32,
-  },
   helpersRow: {
-    marginTop: 28,
+    marginTop: 24,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
