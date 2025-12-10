@@ -13,6 +13,9 @@ import {
 
 import { AuthField } from '@/components/auth/AuthField';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { usersApi } from '@/api/users';
+import { projectsApi } from '@/api/projects';
+import { useSession } from '@/providers/SessionProvider';
 
 const EMAIL_ICON = require('@/assets/images/message 1.png');
 const LOCK_ICON = require('@/assets/images/padlock 1.png');
@@ -21,14 +24,36 @@ export default function HomeScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const handleLogin = () => {
-    if (!email.trim() || !password.trim()) {
-      Alert.alert('Login', 'Email dan password wajib diisi.');
-      return;
-    }
+  const { setUser, setProjects, setHasProject } = useSession();
 
-    router.replace('/(tabs)/home');
+  const handleLogin = () => {
+    (async () => {
+      if (!email.trim() || !password.trim()) {
+        Alert.alert('Login', 'Email dan password wajib diisi.');
+        return;
+      }
+      setLoading(true);
+      try {
+        const loginRes = await usersApi.login({ email, password });
+        setUser(loginRes.user);
+
+        const projects = await projectsApi.getAll();
+        const mine = projects.filter((p) => `${p.id_user}` === `${loginRes.user.id_user}`);
+        setProjects(mine);
+        const hasActiveProject = mine.length > 0;
+        setHasProject(hasActiveProject);
+
+        router.replace(hasActiveProject ? '/(tabs-project)/home' : '/(tabs-empty)/home');
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Gagal login. Periksa kredensial Anda.';
+        Alert.alert('Login gagal', message);
+      } finally {
+        setLoading(false);
+      }
+    })();
   };
 
   return (
@@ -99,8 +124,9 @@ export default function HomeScreen() {
             <TouchableOpacity
               activeOpacity={0.85}
               style={styles.ctaButton}
-              onPress={handleLogin}>
-              <Text style={styles.ctaText}>Masuk</Text>
+              onPress={handleLogin}
+              disabled={loading}>
+              <Text style={styles.ctaText}>{loading ? 'Memproses...' : 'Masuk'}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

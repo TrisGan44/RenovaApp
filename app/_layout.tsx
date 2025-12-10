@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { SessionProvider } from '@/providers/SessionProvider';
 
 export const unstable_settings = {
   initialRouteName: 'index',
@@ -46,22 +47,25 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="register" />
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="consultation" />
-        <Stack.Screen name="design-detail" />
-        <Stack.Screen name="revision-request" />
-        <Stack.Screen name="report-detail" />
-        <Stack.Screen name="payment" />
-        <Stack.Screen name="edit-profile" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SessionProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="register" />
+          <Stack.Screen name="(tabs-empty)" />
+          <Stack.Screen name="(tabs-project)" />
+          <Stack.Screen name="consultation" />
+          <Stack.Screen name="design-detail" />
+          <Stack.Screen name="revision-request" />
+          <Stack.Screen name="report-detail" />
+          <Stack.Screen name="payment" />
+          <Stack.Screen name="edit-profile" />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </SessionProvider>
   );
 }

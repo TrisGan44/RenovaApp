@@ -14,21 +14,45 @@ import { colors } from '@/constants/theme';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { janjiApi } from '@/api/janji';
+import { useSession } from '@/providers/SessionProvider';
 
 export default function ConsultationScreen() {
   const [type, setType] = useState('');
   const [goal, setGoal] = useState('');
   const [address, setAddress] = useState('');
   const [detail, setDetail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+  const { user } = useSession();
 
   const handleSubmit = () => {
-    if (!type.trim() || !goal.trim()) {
-      Alert.alert('Form belum lengkap', 'Isi jenis dan tujuan renovasi.');
-      return;
-    }
-    Alert.alert('Permohonan terkirim', 'Tim kami akan menghubungi Anda dalam 1x24 jam.');
-    router.back();
+    (async () => {
+      if (!type.trim() || !goal.trim()) {
+        Alert.alert('Form belum lengkap', 'Isi jenis dan tujuan renovasi.');
+        return;
+      }
+      if (!user?.id_user) {
+        Alert.alert('Login dulu', 'Silakan login untuk membuat janji.');
+        return;
+      }
+
+      setSubmitting(true);
+      try {
+        await janjiApi.create({
+          keperluan: `${type} - ${goal}`,
+          id_user: user.id_user,
+        });
+        Alert.alert('Permohonan terkirim', 'Tim kami akan menghubungi Anda dalam 1x24 jam.');
+        router.back();
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Gagal mengirim permohonan janji.';
+        Alert.alert('Gagal', message);
+      } finally {
+        setSubmitting(false);
+      }
+    })();
   };
 
   return (
@@ -89,7 +113,11 @@ export default function ConsultationScreen() {
           <Text style={styles.helper}>Semakin detail deskripsi, semakin baik hasil konsultasi</Text>
         </Card>
 
-        <Button label="Kirim Permohonan" onPress={handleSubmit} />
+        <Button
+          label={submitting ? 'Mengirim...' : 'Kirim Permohonan'}
+          onPress={handleSubmit}
+          disabled={submitting}
+        />
         <Text style={styles.footerText}>Tim kami akan menghubungi Anda dalam 1x24 jam</Text>
       </ScrollView>
     </SafeAreaView>

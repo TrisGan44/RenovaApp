@@ -12,6 +12,8 @@ import {
 
 import { AuthField } from '@/components/auth/AuthField';
 import { AuthHeader } from '@/components/auth/AuthHeader';
+import { usersApi } from '@/api/users';
+import { useSession } from '@/providers/SessionProvider';
 
 const EMAIL_ICON = require('@/assets/images/message 1.png');
 const USER_ICON = require('@/assets/images/user 1.png');
@@ -23,17 +25,45 @@ export default function RegisterScreen() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { setUser, setHasProject, setProjects } = useSession();
 
   const handleRegister = () => {
-    if (!email.trim() || !name.trim() || !password.trim()) {
-      Alert.alert('Daftar', 'Lengkapi semua kolom.');
-      return;
-    }
-    if (password !== confirmPassword) {
-      Alert.alert('Daftar', 'Konfirmasi password tidak sama.');
-      return;
-    }
-    router.replace('/(tabs)/home');
+    (async () => {
+      if (!email.trim() || !name.trim() || !password.trim()) {
+        Alert.alert('Daftar', 'Lengkapi semua kolom.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        Alert.alert('Daftar', 'Konfirmasi password tidak sama.');
+        return;
+      }
+      setLoading(true);
+      try {
+        const res = await usersApi.create({
+          Nama_Lengkap: name,
+          email,
+          password,
+        });
+
+        setUser({
+          id_user: res.id_user,
+          Nama_Lengkap: name,
+          email,
+          password,
+          id_role: 1,
+        });
+        setProjects([]);
+        setHasProject(false);
+        router.replace('/(tabs-empty)/home');
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : 'Gagal mendaftarkan akun baru.';
+        Alert.alert('Daftar gagal', message);
+      } finally {
+        setLoading(false);
+      }
+    })();
   };
 
   return (
@@ -106,8 +136,9 @@ export default function RegisterScreen() {
             <TouchableOpacity
               activeOpacity={0.85}
               style={styles.ctaButton}
-              onPress={handleRegister}>
-              <Text style={styles.ctaText}>Buat Akun</Text>
+              onPress={handleRegister}
+              disabled={loading}>
+              <Text style={styles.ctaText}>{loading ? 'Memproses...' : 'Buat Akun'}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
